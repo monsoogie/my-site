@@ -1,0 +1,139 @@
+---
+import Base from '../../layouts/Base.astro';
+import { projects, nextProject, type Project } from '../../data/projects';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+
+interface Props { project: Project }
+const { project: p } = Astro.props;
+const next = nextProject(p.slug);
+const meta = [
+  ['Client', p.client],
+  ['My role', p.role],
+  ['Team', p.team],
+  ['Timeline', p.duration],
+];
+---
+<Base title={p.title} description={p.summary}>
+  <article>
+    <header class="hero container">
+      <div class="hero-text">
+        <a class="back" href="/work/">← All work</a>
+        <span class="chip on-cream">{p.discipline} · {p.year}</span>
+        <h1>{p.title}</h1>
+        <p class="lede">{p.summary}</p>
+      </div>
+      <div class:list={['hero-art', `bg-${p.color}`]}>
+        <img src={p.cover} alt={p.coverAlt} width="480" height="416" />
+      </div>
+    </header>
+
+    <div class="container">
+      <dl class="meta">
+        {meta.map(([k, v]) => (
+          <div><dt class="caps soft">{k}</dt><dd>{v}</dd></div>
+        ))}
+      </dl>
+    </div>
+
+    <section class="block container" aria-labelledby="context">
+      <h2 id="context">Context</h2>
+      <div class="prose">{p.context.map((t) => <p>{t}</p>)}</div>
+    </section>
+
+    <section class="block container" aria-labelledby="role">
+      <h2 id="role">My role</h2>
+      <div class="prose">{p.myRole.map((t) => <p>{t}</p>)}</div>
+    </section>
+
+    <section class="block container" aria-labelledby="process">
+      <h2 id="process">Process</h2>
+      <ol class="steps">
+        {p.process.map((s, i) => (
+          <li>
+            <span class="num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{s.title}</h3>
+            <p class="soft">{s.body}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="gallery container" aria-label="Project images">
+      {p.images.map((img) => (
+        <figure class:list={[img.size === 'wide' ? 'wide' : 'half']}>
+          <img src={img.src} alt={img.alt} loading="lazy" decoding="async" />
+          {img.caption && <figcaption class="caps soft">{img.caption}</figcaption>}
+        </figure>
+      ))}
+    </section>
+
+    <section class="block container" aria-labelledby="outcome">
+      <h2 id="outcome">Outcome</h2>
+      <div class="outcome">
+        <p class="lede">{p.outcome.summary}</p>
+        <ul class="metrics">
+          {p.outcome.metrics.map((m) => (
+            <li class={`bg-${p.color}`}><strong>{m.value}</strong><span>{m.label}</span></li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <nav class="next container" aria-label="Next project">
+      <a href={`/work/${next.slug}/`}>
+        <span class="caps soft">Next project</span>
+        <span class="next-title">{next.title} <span class="hand" aria-hidden="true">→</span></span>
+      </a>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: center; padding-block: clamp(32px, 6vw, 80px); }
+  .hero-text { display: grid; gap: 20px; justify-items: start; }
+  .back { font-size: 14px; font-weight: 600; text-decoration: none; }
+  .back:hover { text-decoration: underline; text-underline-offset: 4px; }
+  h1 { font-size: clamp(44px, 6.5vw, 96px); font-weight: 800; letter-spacing: -0.05em; line-height: 0.95; }
+  .hero-art { border-radius: var(--radius-card); aspect-ratio: 1 / 0.9; display: grid; place-items: center; overflow: hidden; }
+  .hero-art img { width: 72%; }
+
+  .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 20px 32px; padding-block: 28px; border-block: 1.5px solid var(--line); }
+  .meta div { display: grid; gap: 4px; }
+  .meta dd { font-size: 16px; font-weight: 500; }
+
+  .block { display: grid; grid-template-columns: minmax(160px, 1fr) minmax(0, 2.6fr); gap: 16px clamp(24px, 5vw, 80px); padding-block: clamp(48px, 7vw, 96px) 0; }
+  .block h2 { font-size: clamp(26px, 2.8vw, 36px); letter-spacing: -0.025em; line-height: 1.1; }
+  .prose { font-size: 18px; }
+
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  @media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }
+  .steps li { background: var(--paper); border-radius: var(--radius-panel); padding: 22px; display: grid; gap: 8px; align-content: start; }
+  .num { font-family: var(--font-accent); color: var(--secondary); font-size: 26px; line-height: 1; }
+  .steps h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.015em; }
+  .steps p { font-size: 15px; line-height: 1.5; }
+
+  .gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; padding-block: clamp(56px, 8vw, 112px) 0; }
+  .gallery figure { display: grid; gap: 10px; }
+  .gallery .wide { grid-column: 1 / -1; }
+  .gallery img { width: 100%; border-radius: var(--radius-card); background: var(--paper); }
+
+  .outcome { display: grid; gap: 28px; }
+  .metrics { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 12px; }
+  .metrics li { border-radius: var(--radius-panel); padding: 22px; display: grid; gap: 4px; color: var(--ink); }
+  .metrics strong { font-size: clamp(36px, 4vw, 52px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .metrics span { font-size: 14px; }
+
+  .next { padding-block: clamp(64px, 10vw, 128px) 0; }
+  .next a { display: grid; gap: 8px; text-decoration: none; padding: 32px 0; border-top: 1.5px solid var(--accent); }
+  .next-title { font-size: clamp(34px, 5vw, 64px); font-weight: 800; letter-spacing: -0.045em; line-height: 1; }
+  .next .hand { font-weight: 400; display: inline-block; transition: transform .3s; }
+  .next a:hover .hand { transform: translateX(8px); }
+
+  @media (max-width: 760px) {
+    .hero, .block { grid-template-columns: 1fr; }
+    .gallery { grid-template-columns: 1fr; }
+  }
+</style>

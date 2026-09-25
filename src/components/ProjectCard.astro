@@ -1,0 +1,42 @@
+---
+import type { Project } from '../data/projects';
+interface Props { project: Project; headingLevel?: 'h2' | 'h3' }
+const { project: p, headingLevel = 'h3' } = Astro.props;
+const Heading = headingLevel;
+---
+<a class="card" href={`/work/${p.slug}/`}>
+  <div class="top">
+    <div class="row">
+      <span class="chip">{p.discipline} · {p.year}</span>
+      <span class="arrow" aria-hidden="true">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 11L11 3M5 3h6v6" /></svg>
+      </span>
+    </div>
+    <Heading class="title">{p.title}</Heading>
+    <p class="summary">{p.summary}</p>
+  </div>
+  <div class:list={['panel', `bg-${p.color}`]}>
+    <img src={p.cover} alt={p.coverAlt} width="480" height="416" loading="lazy" decoding="async" />
+  </div>
+</a>
+
+<style>
+  .card {
+    background: var(--paper); border-radius: var(--radius-card); padding: 10px;
+    display: grid; grid-template-rows: 1fr auto; text-decoration: none; color: var(--accent);
+    transition: transform .35s cubic-bezier(.2, .8, .2, 1);
+  }
+  .card:hover { transform: translateY(-4px) rotate(-0.6deg); }
+  .top { padding: 14px 14px 22px; display: grid; gap: 12px; align-content: start; }
+  .row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .arrow { width: 30px; height: 30px; flex: none; border-radius: 50%; background: var(--secondary); color: var(--cream); display: grid; place-items: center; transition: transform .3s; }
+  .card:hover .arrow { transform: rotate(45deg); }
+  .arrow svg { width: 13px; height: 13px; }
+  .title { font-size: clamp(24px, 2.2vw, 28px); font-weight: 800; letter-spacing: -0.035em; line-height: 1; }
+  .summary { font-size: 14px; line-height: 1.45; color: var(--accent-soft); }
+  .panel { border-radius: var(--radius-panel); aspect-ratio: 1 / 0.92; display: grid; place-items: center; overflow: hidden; }
+  .panel img { width: 80%; height: auto; }
+  @media (prefers-reduced-motion: reduce) {
+    .card:hover, .card:hover .arrow { transform: none; }
+  }
+</style>

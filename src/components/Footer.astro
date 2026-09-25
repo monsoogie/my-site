@@ -1,0 +1,32 @@
+---
+import { site } from '../data/site';
+import Logo from './Logo.astro';
+interface Props { showHello?: boolean }
+const { showHello = true } = Astro.props;
+const year = new Date().getFullYear();
+---
+<footer class="foot container">
+  {showHello && (
+    <div class="hello">
+      <p class="say">Say <span class="hand">hello</span> →</p>
+      <div class="links">
+        <a class="pill" href={`mailto:${site.email}`}>{site.email}</a>
+        <a class="pill" href={site.linkedin} rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  )}
+  <div class="base">
+    <Logo class="foot-mark" />
+    <p class="caps soft">© {year} {site.name} · {site.location}</p>
+  </div>
+</footer>
+
+<style>
+  .foot { padding-block: clamp(48px, 8vw, 96px) 32px; display: grid; gap: 48px; }
+  .hello { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 20px; border-top: 1.5px solid var(--accent); padding-top: 24px; }
+  .say { font-size: clamp(32px, 5vw, 56px); letter-spacing: -0.02em; line-height: 1.05; }
+  .say .hand { font-size: 1.05em; }
+  .links { display: flex; flex-wrap: wrap; gap: 10px; }
+  .base { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .base :global(.foot-mark) { width: 40px; color: var(--accent); }
+</style>

@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import Badge from '../components/Badge.astro';
+import Scribble from '../components/Scribble.astro';
+import { site } from '../data/site';
+const { about, services } = site;
+---
+<Base title="About" description={about.intro}>
+  <section class="intro container">
+    <Scribble variant={2} style="right:-8%; bottom:-80px; width:min(40%, 480px);" />
+    <div class="text">
+      <p class="caps">About</p>
+      <h1>I’m <span class="hand">{site.name}</span>. {about.intro.replace(/^I’m a /, 'A ')}</h1>
+      <div class="prose soft-links">
+        {about.bio.map((t) => <p>{t}</p>)}
+      </div>
+      <Badge />
+    </div>
+    <figure class="portrait bg-dusty-blue">
+      <img src="/about/portrait.svg" alt="Placeholder portrait of Monika." width="800" height="1000" />
+    </figure>
+  </section>
+
+  <section class="section container" aria-labelledby="leadership">
+    <div class="section-head">
+      <p class="caps">Leadership</p>
+      <h2 id="leadership">How I lead a team</h2>
+      <p class="soft">Most of my job is making room for good work to happen. These are the habits that do it.</p>
+    </div>
+    <ul class="principles">
+      {about.leadership.map((l) => (
+        <li>
+          <h3>{l.title}</h3>
+          <p class="soft">{l.body}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="section container services-wrap" aria-labelledby="services">
+    <div class="section-head">
+      <p class="caps">Services</p>
+      <h2 id="services" class="stack">Branding. <em>UX/UI.</em> Web.</h2>
+    </div>
+    <ul class="services">
+      {services.map((s) => (
+        <li class={`bg-${s.color}`}>
+          <h3>{s.title}</h3>
+          <p>{s.body}</p>
+          <ul>{s.items.map((i) => <li>{i}</li>)}</ul>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .intro { position: relative; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: start; padding-block: clamp(40px, 7vw, 96px); }
+  .text { position: relative; z-index: 1; display: grid; gap: 28px; }
+  h1 { font-size: clamp(34px, 4.4vw, 60px); line-height: 1.08; letter-spacing: -0.025em; font-weight: 400; max-width: 20ch; }
+  .prose { font-size: 18px; }
+  .portrait { position: relative; z-index: 1; border-radius: var(--radius-card); overflow: hidden; transform: rotate(1.5deg); }
+  .portrait img { width: 100%; }
+
+  .principles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 0 32px; }
+  .principles li { display: grid; gap: 8px; align-content: start; padding-block: 24px; border-top: 1.5px solid var(--line); }
+  .principles h3 { font-size: 21px; font-weight: 700; letter-spacing: -0.015em; }
+  .principles p { font-size: 16px; }
+
+  .services-wrap { padding-top: 0; }
+  .services-wrap h2 { font-size: clamp(40px, 6vw, 80px); }
+  .services { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; }
+  .services > li { border-radius: var(--radius-card); padding: clamp(24px, 3vw, 36px); display: grid; gap: 14px; align-content: start; color: var(--ink); }
+  .services h3 { font-size: clamp(28px, 3vw, 36px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+  .services p { font-size: 16px; }
+  .services ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
+  .services ul li { font-size: 15px; font-weight: 500; padding-top: 8px; border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
+
+  @media (max-width: 860px) {
+    .intro { grid-template-columns: 1fr; }
+    .portrait { max-width: 420px; }
+  }
+</style>

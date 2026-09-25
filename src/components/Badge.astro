@@ -1,0 +1,27 @@
+---
+// Rotating circular "other skills" badge with its caption.
+import { site } from '../data/site';
+interface Props { caption?: string }
+const { caption = site.otherSkills } = Astro.props;
+const id = `circ-${Math.random().toString(36).slice(2, 8)}`;
+---
+<div class="skills">
+  <div class="badge" aria-hidden="true">
+    <svg viewBox="0 0 100 100">
+      <defs><path id={id} d="M50 50 m-36 0 a36 36 0 1 1 72 0 a36 36 0 1 1 -72 0" /></defs>
+      <text textLength="222" lengthAdjust="spacing"><textPath href={`#${id}`} textLength="222" lengthAdjust="spacing">Other skills ✦ Other skills ✦</textPath></text>
+    </svg>
+  </div>
+  <p class="caps"><span class="sr-only">Other skills: </span>{caption}</p>
+</div>
+
+<style>
+  .skills { display: flex; align-items: center; gap: 16px; }
+  .badge { width: 92px; height: 92px; flex: none; position: relative; }
+  .badge svg { width: 100%; height: 100%; animation: spin 18s linear infinite; }
+  .badge text { font-size: 10.5px; letter-spacing: 0.12em; font-weight: 600; fill: var(--accent); text-transform: uppercase; }
+  .badge::after { content: ''; position: absolute; inset: 42px; border-radius: 50%; background: var(--secondary); }
+  p { max-width: 30ch; letter-spacing: 0.06em; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .badge svg { animation: none; } }
+</style>
