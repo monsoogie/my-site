@@ -1,0 +1,45 @@
+---
+import Logo from './Logo.astro';
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/work/', label: 'Work' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' },
+];
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+<header class="nav container">
+  <nav aria-label="Main">
+    <ul>
+      {links.map((l) => (
+        <li><a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+  <a class="home" href="/" aria-label="Monika, home">
+    <Logo class="nav-mark" />
+  </a>
+</header>
+
+<style>
+  .nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 24px; position: relative; z-index: 2; }
+  ul { display: flex; flex-wrap: wrap; gap: 2px 4px; list-style: none; margin: 0; padding: 0; }
+  a:not(.home) {
+    display: inline-block; padding: 6px 14px; border-radius: var(--radius-pill);
+    border: 1.5px solid transparent; text-decoration: none;
+    font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+    transition: border-color .2s;
+  }
+  a:not(.home):hover { border-color: var(--line); }
+  a[aria-current='page'] { border-color: var(--accent) !important; }
+  .home { color: var(--accent); flex: none; line-height: 0; transition: color .2s, transform .3s; }
+  .home:hover { color: var(--secondary); transform: rotate(-6deg); }
+  .home :global(.nav-mark) { width: 64px; }
+  @media (max-width: 520px) {
+    .nav { align-items: flex-start; }
+    a:not(.home) { padding: 6px 10px; font-size: 12px; }
+    .home :global(.nav-mark) { width: 48px; }
+  }
+</style>

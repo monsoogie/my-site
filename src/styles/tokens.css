@@ -1,0 +1,42 @@
+/*
+  Design tokens. Every colour, font and radius on the site comes from here.
+  Contrast (WCAG 2.1) on --cream / --paper:
+    --accent       6.67 / 6.21  AA  all text
+    --accent-soft  5.02 / 4.68  AA  secondary text
+    --secondary    4.50 / 4.19  large text and graphics only (name, dot, arrows)
+*/
+:root {
+  color-scheme: light;
+
+  /* Base */
+  --cream: #FBF6E9;
+  --paper: #F4EEDD;
+
+  /* Blues */
+  --accent: #385888;
+  --accent-soft: #4F6B96;
+  --secondary: #4A72B0;
+  --ink: #1F2A3D;
+
+  /* Project pastels */
+  --dusty-blue: #D3D9EC;
+  --butter: #F1E1A6;
+  --sage: #D0DDC2;
+  --apricot: #F4D2BC;
+
+  --line: color-mix(in srgb, var(--accent) 22%, transparent);
+  --scribble: color-mix(in srgb, var(--secondary) 35%, transparent);
+
+  /* Type */
+  --font-sans: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-accent: "Architects Daughter", "Segoe Print", cursive;
+
+  /* Shape */
+  --radius-card: 28px;
+  --radius-panel: 22px;
+  --radius-pill: 999px;
+
+  /* Layout */
+  --gutter: clamp(16px, 4vw, 48px);
+  --max: 1280px;
+}

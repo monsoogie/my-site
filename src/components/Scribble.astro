@@ -1,0 +1,17 @@
+---
+// Loose hand-drawn background line. Purely decorative.
+interface Props { variant?: 1 | 2; style?: string }
+const { variant = 1, style } = Astro.props;
+const paths = {
+  1: 'M10 40 C120 10, 260 20, 330 70 C400 120, 300 190, 220 170 C130 150, 170 80, 260 100 C340 118, 380 200, 395 250',
+  2: 'M5 200 C60 120, 140 240, 200 160 C250 95, 180 40, 130 80 C90 115, 160 170, 250 130 C320 100, 360 30, 395 20',
+};
+---
+<svg class="scribble" viewBox="0 0 400 260" aria-hidden="true" style={style}>
+  <path filter="url(#wobble)" d={paths[variant]} />
+</svg>
+
+<style>
+  .scribble { position: absolute; pointer-events: none; z-index: 0; }
+  path { fill: none; stroke: var(--scribble); stroke-width: 2; stroke-linecap: round; }
+</style>

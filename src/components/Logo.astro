@@ -1,0 +1,15 @@
+---
+// Hand-traced face mark. Takes the current text colour.
+interface Props { class?: string; title?: string }
+const { class: cls = '', title } = Astro.props;
+---
+<svg class:list={['mark', cls]} viewBox="70 90 340 300" role={title ? 'img' : undefined} aria-label={title} aria-hidden={title ? undefined : 'true'}>
+  <path d="M258 205 V168 C258 124 222 108 190 116 C154 125 136 166 140 208 C144 248 164 274 190 271 C214 268 222 232 208 210 C198 194 178 190 172 202 M258 168 C262 126 290 108 322 110 C362 113 388 150 380 196 C372 240 332 250 282 248 C222 246 152 224 97 247" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="168" cy="318" r="13" fill="currentColor" />
+  <circle cx="332" cy="318" r="13" fill="currentColor" />
+  <path d="M226 362 H274" stroke="currentColor" stroke-width="12" stroke-linecap="round" />
+</svg>
+
+<style>
+  .mark { display: block; height: auto; }
+</style>

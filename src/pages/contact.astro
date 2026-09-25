@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import Scribble from '../components/Scribble.astro';
+import { site } from '../data/site';
+---
+<Base title="Contact" description={`Get in touch with ${site.name}.`} showHello={false}>
+  <section class="contact container">
+    <Scribble style="right:-6%; top:10px; width:min(48%, 560px);" />
+    <p class="caps">Contact</p>
+    <h1>Say <span class="hand">hello</span>.</h1>
+    <p class="lede soft">For new projects, speaking or a chat about design leadership, email is best. I reply within a couple of days.</p>
+
+    <div class="rows">
+      <div class="row">
+        <span class="caps soft">Email</span>
+        <a class="big" href={`mailto:${site.email}`}>{site.email}</a>
+        <button class="pill" type="button" data-copy={site.email}>Copy</button>
+      </div>
+      <div class="row">
+        <span class="caps soft">LinkedIn</span>
+        <a class="big" href={site.linkedin} rel="noopener">Connect on LinkedIn ↗</a>
+      </div>
+    </div>
+    <p class="status caps" role="status" aria-live="polite"></p>
+  </section>
+</Base>
+
+<script>
+  const status = document.querySelector<HTMLElement>('.contact .status');
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const text = btn.dataset.copy ?? '';
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = 'Copied';
+        if (status) status.textContent = 'Email address copied';
+      } catch {
+        // Clipboard blocked: select the address so it can be copied by hand.
+        const link = btn.parentElement?.querySelector('a');
+        if (link) window.getSelection()?.selectAllChildren(link);
+        if (status) status.textContent = 'Address selected. Press Ctrl+C or Cmd+C to copy';
+      }
+      setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+    });
+  });
+</script>
+
+<style>
+  .contact { position: relative; display: grid; gap: 24px; padding-block: clamp(48px, 9vw, 128px) clamp(48px, 8vw, 96px); }
+  .contact > :not(.scribble) { position: relative; z-index: 1; }
+  h1 { font-size: clamp(64px, 12vw, 176px); font-weight: 800; letter-spacing: -0.055em; line-height: 0.9; }
+  h1 .hand { font-weight: 400; letter-spacing: 0; }
+  .rows { display: grid; margin-top: clamp(24px, 4vw, 48px); border-top: 1.5px solid var(--accent); }
+  .row { display: grid; grid-template-columns: 120px minmax(0, 1fr) auto; align-items: center; gap: 12px 24px; padding-block: 24px; border-bottom: 1.5px solid var(--line); }
+  .big { font-size: clamp(22px, 3.4vw, 44px); font-weight: 500; letter-spacing: -0.02em; line-height: 1.1; text-decoration: none; overflow-wrap: anywhere; }
+  .big:hover { color: var(--secondary); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+  .status { min-height: 1.7em; }
+  @media (max-width: 640px) {
+    .row { grid-template-columns: 1fr auto; }
+    .row > .caps { grid-column: 1 / -1; }
+  }
+</style>

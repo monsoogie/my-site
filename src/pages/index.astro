@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import Badge from '../components/Badge.astro';
+import Carousel from '../components/Carousel.astro';
+import Scribble from '../components/Scribble.astro';
+import { site } from '../data/site';
+import { featuredProjects } from '../data/projects';
+---
+<Base>
+  <section class="hero container">
+    <Scribble style="right:-6%; top:-60px; width:min(46%, 560px);" />
+    <div class="headline">
+      <span class="dot" aria-hidden="true"></span>
+      <h1>Hello, I’m <span class="hand">{site.name}</span> — {site.home.headlineRest}</h1>
+    </div>
+    <div class="aside">
+      <p class="lede">{site.home.positioning}</p>
+      <Badge />
+    </div>
+  </section>
+
+  <div class="featured">
+    <Carousel projects={featuredProjects} stack={site.home.workStack} blurb={site.home.workBlurb} />
+  </div>
+</Base>
+
+<style>
+  .hero {
+    position: relative;
+    display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px); align-items: end;
+    padding-block: clamp(40px, 8vw, 110px) clamp(72px, 10vw, 140px);
+  }
+  .headline, .aside { position: relative; z-index: 1; }
+  .dot { display: block; width: 14px; height: 14px; border-radius: 50%; background: var(--secondary); margin: 0 0 28px 46%; }
+  h1 { font-size: clamp(38px, 5.8vw, 84px); line-height: 1.06; letter-spacing: -0.025em; font-weight: 400; max-width: 17ch; }
+  h1 .hand { font-size: 0.98em; }
+  .aside { display: grid; gap: 32px; padding-bottom: 10px; }
+  .featured { padding-bottom: clamp(48px, 8vw, 96px); }
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; align-items: start; }
+    .hero :global(.scribble) { top: 40px !important; width: 62% !important; }
+    .dot { margin-left: 70%; }
+  }
+</style>

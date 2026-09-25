@@ -1,0 +1,52 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+interface Props { title?: string; description?: string; showHello?: boolean }
+const { title, description = site.description, showHello = true } = Astro.props;
+const pageTitle = title ? `${title} · ${site.name}` : site.title;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta name="theme-color" content="#FBF6E9" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <!-- Shared wobble filter for hand-drawn lines -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <filter id="wobble" x="-5%" y="-5%" width="110%" height="110%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="1" seed="4" />
+          <feDisplacementMap in="SourceGraphic" scale="2.4" />
+        </filter>
+      </defs>
+    </svg>
+
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer showHello={showHello} />
+  </body>
+</html>
+
+<style is:global>
+  /* Lets background scribbles bleed to the screen edge without causing sideways scroll. */
+  main { position: relative; overflow-x: clip; }
+</style>

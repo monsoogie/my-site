@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 640" width="800" height="640"><defs><filter id="w" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="1" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter><style>.ln{fill:none;stroke:#1F2A3D;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}</style></defs>
+<rect width="800" height="640" fill="#D3D9EC"/>
+<g transform="translate(330.0 240.0)"><rect x="6" y="6" width="140" height="104" rx="14" fill="#FBF6E9"/><g filter="url(#w)"><rect class="ln" width="140" height="104" rx="14"/><circle class="ln" cx="40" cy="36" r="12"/><path class="ln" d="M12 92 L52 58 L78 80 L100 62 L130 92"/></g></g>
+<text x="400.0" y="394.0" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="600" fill="#1F2A3D">Component library</text>
+<text x="400.0" y="426.0" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="16" fill="#1F2A3D" opacity=".7">Replace: public/projects/tidewell-app/image-3</text>
+</svg>

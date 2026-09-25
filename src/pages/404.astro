@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Page not found">
+  <section class="container nf">
+    <h1 class="stack">Lost the <em>thread.</em></h1>
+    <p class="lede soft">This page doesn’t exist, or it moved.</p>
+    <a class="pill" href="/">Back home</a>
+  </section>
+</Base>
+
+<style>
+  .nf { display: grid; gap: 24px; justify-items: start; padding-block: clamp(64px, 12vw, 160px); }
+  h1 { font-size: clamp(56px, 10vw, 140px); }
+</style>

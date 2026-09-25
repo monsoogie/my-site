@@ -1,0 +1,91 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import type { Project } from '../data/projects';
+interface Props { projects: Project[]; stack: readonly string[]; blurb: string }
+const { projects, stack, blurb } = Astro.props;
+---
+<section class="work container" aria-labelledby="featured-heading">
+  <div class="intro">
+    <h2 id="featured-heading" class="stack">
+      {stack.map((line, i) => (i === 1 ? <em>{line}</em> : <span>{line}</span>))}
+    </h2>
+    <p class="soft">{blurb}</p>
+    <div class="controls">
+      <button class="round" type="button" data-dir="-1" aria-label="Previous projects">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M10 3L5 8l5 5" /></svg>
+      </button>
+      <button class="round" type="button" data-dir="1" aria-label="Next projects">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 3l5 5-5 5" /></svg>
+      </button>
+      <a class="all" href="/work/">All work →</a>
+    </div>
+  </div>
+
+  <ul class="rail" aria-label="Featured projects" tabindex="0">
+    {projects.map((p) => <li><ProjectCard project={p} /></li>)}
+  </ul>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.work').forEach((section) => {
+    const rail = section.querySelector<HTMLElement>('.rail');
+    const buttons = section.querySelectorAll<HTMLButtonElement>('.round[data-dir]');
+    if (!rail) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const update = () => {
+      const max = rail.scrollWidth - rail.clientWidth - 2;
+      buttons.forEach((b) => {
+        const dir = Number(b.dataset.dir);
+        b.disabled = dir < 0 ? rail.scrollLeft <= 2 : rail.scrollLeft >= max;
+      });
+    };
+    buttons.forEach((b) =>
+      b.addEventListener('click', () => {
+        const item = rail.querySelector('li');
+        const step = item ? item.getBoundingClientRect().width + 18 : rail.clientWidth * 0.8;
+        rail.scrollBy({ left: step * Number(b.dataset.dir), behavior: reduce.matches ? 'auto' : 'smooth' });
+      }),
+    );
+    rail.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  });
+</script>
+
+<style>
+  .work { display: grid; grid-template-columns: minmax(240px, 0.8fr) minmax(0, 2.2fr); gap: clamp(28px, 4vw, 56px); align-items: start; padding-right: 0; }
+  .intro { display: grid; gap: 24px; align-content: start; position: sticky; top: 24px; }
+  .stack { font-size: clamp(40px, 5.2vw, 72px); display: grid; }
+  .intro p { font-size: 16px; max-width: 30ch; }
+  .controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .round {
+    width: 46px; height: 46px; border-radius: 50%; border: 1.5px solid var(--accent);
+    background: transparent; color: var(--accent); cursor: pointer; display: grid; place-items: center;
+    transition: background .2s, color .2s, border-color .2s, opacity .2s;
+  }
+  .round:hover:not(:disabled) { background: var(--secondary); border-color: var(--secondary); color: var(--cream); }
+  .round:disabled { opacity: 0.35; cursor: default; }
+  .round svg { width: 18px; height: 18px; }
+  .all { margin-left: 8px; font-size: 14px; font-weight: 600; text-underline-offset: 4px; }
+
+  .rail {
+    --bleed: max(0px, (100vw - var(--max)) / 2);
+    list-style: none; margin: 0 calc(-1 * var(--bleed)) 0 0; padding: 6px calc(var(--gutter) + var(--bleed)) 18px 6px;
+    display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-left: 6px;
+    overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+    -webkit-overflow-scrolling: touch;
+  }
+  .rail li { flex: 0 0 clamp(260px, 26vw, 340px); scroll-snap-align: start; display: grid; }
+
+  @media (max-width: 860px) {
+    .work { grid-template-columns: 1fr; padding-right: 0; }
+    .intro { position: static; padding-right: var(--gutter); }
+    .stack { display: block; }
+    .stack > * + * { margin-left: 0.25em; }
+    .controls .round { display: none; }
+    .all { margin-left: 0; }
+    .rail { margin: 0 0 0 calc(-1 * var(--gutter)); padding-left: var(--gutter); padding-right: var(--gutter); scroll-padding-left: var(--gutter); }
+    .rail li { flex-basis: min(78vw, 320px); }
+  }
+</style>
